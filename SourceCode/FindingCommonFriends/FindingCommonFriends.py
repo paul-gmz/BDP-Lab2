@@ -30,9 +30,19 @@ def reduce(key, value):
 
 if __name__ == "__main__":
     sc = SparkContext.getOrCreate()
+    
+    #reads the file
     lines = sc.textFile("facebook_combined.txt", 1)
+
+    #creates a (key, value) paris
     pairs = lines.map(lambda x: (x.split(" ")[0], x.split(" ")[1]))
+
+    #groups by key to produce key and list of values
     pair = pairs.groupByKey().map(lambda x : (x[0], list(x[1])))
+
+    #runs mapper
     line = pair.flatMap(map)
+
+    #reduced by key
     commonFriends = line.reduceByKey(reduce)
     commonFriends.coalesce(1).saveAsTextFile("commonFriendsOutput")
