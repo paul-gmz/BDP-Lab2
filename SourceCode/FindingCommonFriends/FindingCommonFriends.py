@@ -30,7 +30,7 @@ def reduce(key, value):
 
 if __name__ == "__main__":
     sc = SparkContext.getOrCreate()
-    
+
     #reads the file
     lines = sc.textFile("facebook_combined.txt", 1)
 
